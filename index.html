@@ -37,6 +37,7 @@
     /* Reveal on Scroll */
     .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
     .reveal.active { opacity: 1; transform: translateY(0); }
+    
     .delay-100 { transition-delay: 150ms; }
     .delay-200 { transition-delay: 300ms; }
     .delay-300 { transition-delay: 450ms; }
@@ -55,7 +56,6 @@
       border: 1px solid rgba(255, 255, 255, 0.5);
       box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     }
-    /* Dark Glass for Map Section */
     .glass-dark-card {
         background: rgba(255, 255, 255, 0.03);
         border: 1px solid rgba(255, 255, 255, 0.08);
@@ -64,9 +64,18 @@
 
     /* Navbar Glass */
     nav.nav-glass {
-      background: rgba(21, 25, 30, 0.85);
+      background: rgba(21, 25, 30, 0.95);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* Mobile Menu Drawer */
+    #mobileMenu {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateX(100%);
+    }
+    #mobileMenu.open {
+      transform: translateX(0);
     }
 
     /* Split Audience Section */
@@ -80,6 +89,16 @@
     .input-group input:focus ~ label, .input-group input:not(:placeholder-shown) ~ label,
     .input-group textarea:focus ~ label, .input-group textarea:not(:placeholder-shown) ~ label {
       top: -12px; font-size: 11px; color: #d4af37; font-weight: 700;
+    }
+
+    /* FAQ Accordion */
+    .faq-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease-out;
+    }
+    .faq-icon {
+      transition: transform 0.3s ease;
     }
 
     /* Map Animation Stroke */
@@ -107,7 +126,8 @@
 <body class="bg-cream font-body text-slate-800 antialiased overflow-x-hidden selection:bg-gold-500 selection:text-white">
 
   <nav id="topNav" class="fixed top-0 w-full z-50 px-6 md:px-12 py-5 flex justify-between items-center text-white transition-all duration-300">
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-3 relative z-50">
+
       <span class="font-display font-medium tracking-[0.1em] text-xl">PRIME BONDS</span>
     </div>
 
@@ -116,9 +136,24 @@
       <a href="#audience" class="hover:text-gold-400 transition-colors">Select</a>
       <a href="#process" class="hover:text-gold-400 transition-colors">Process</a>
       <a href="#map" class="hover:text-gold-400 transition-colors">Australia</a>
+      <a href="#faq" class="hover:text-gold-400 transition-colors">FAQ</a>
       <a href="#contact" class="hover:text-gold-400 transition-colors">Contact</a>
     </div>
+
+    <button id="menuBtn" class="md:hidden relative z-50 text-white focus:outline-none">
+      <i class="fa-solid fa-bars text-2xl"></i>
+    </button>
   </nav>
+
+  <div id="mobileMenu" class="fixed inset-0 z-40 bg-slate-900/95 backdrop-blur-xl flex flex-col justify-center items-center gap-8 text-white md:hidden">
+    <a href="#about" class="text-2xl font-display" onclick="toggleMenu()">About</a>
+    <a href="#audience" class="text-2xl font-display" onclick="toggleMenu()">Select</a>
+    <a href="#process" class="text-2xl font-display" onclick="toggleMenu()">Process</a>
+    <a href="#map" class="text-2xl font-display" onclick="toggleMenu()">Australia</a>
+    <a href="#faq" class="text-2xl font-display" onclick="toggleMenu()">FAQ</a>
+    <a href="#contact" class="text-2xl font-display" onclick="toggleMenu()">Contact</a>
+    
+  </div>
 
   <header class="relative w-full h-screen min-h-[750px] flex items-center bg-cover bg-center bg-no-repeat bg-fixed"
           style="background-image: url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=2070&auto=format&fit=crop');">
@@ -128,17 +163,17 @@
 
     <div class="container mx-auto px-6 relative z-10 pt-20">
       
-      <div class="glass-panel p-10 md:p-12 max-w-xl rounded-sm reveal active border-l-4 border-l-gold-400">
+      <div class="glass-panel p-8 md:p-12 max-w-xl rounded-sm reveal active border-l-4 border-l-gold-400">
         <div class="text-gold-400 font-bold tracking-[0.25em] text-xs uppercase mb-5">
           Institutional Surety
         </div>
 
-        <h1 class="font-display font-medium text-5xl md:text-6xl text-white leading-[1.05] mb-6">
+        <h1 class="font-display font-medium text-4xl md:text-6xl text-white leading-[1.1] mb-6">
           Ready for your <br />
           <span class="italic text-gold-200">next acquisition?</span>
         </h1>
 
-        <p class="text-slate-100 text-lg font-light leading-relaxed mb-8">
+        <p class="text-slate-100 text-base md:text-lg font-light leading-relaxed mb-8">
           Secure premium real estate while keeping your capital working until settlement — without a 10% cash deposit.
         </p>
 
@@ -180,29 +215,29 @@
   </section>
 
   <div class="bg-stone-50 py-16 relative z-20">
-    <div class="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
+    <div class="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
       <div class="text-center reveal p-6 bg-white border border-stone-200 shadow-sm rounded-lg hover:shadow-md transition-shadow">
-        <div class="font-display text-4xl text-slate-900 mb-2">100%</div>
-        <div class="text-xs uppercase tracking-widest text-slate-400">Vendor Acceptance</div>
+        <div class="font-display text-3xl md:text-4xl text-slate-900 mb-2">100%</div>
+        <div class="text-[10px] md:text-xs uppercase tracking-widest text-slate-400">Vendor Acceptance</div>
       </div>
       <div class="text-center reveal delay-100 p-6 bg-white border border-stone-200 shadow-sm rounded-lg hover:shadow-md transition-shadow">
-        <div class="font-display text-4xl text-slate-900 mb-2">24h</div>
-        <div class="text-xs uppercase tracking-widest text-slate-400">Digital Approval</div>
+        <div class="font-display text-3xl md:text-4xl text-slate-900 mb-2">24h</div>
+        <div class="text-[10px] md:text-xs uppercase tracking-widest text-slate-400">Digital Approval</div>
       </div>
       <div class="text-center reveal delay-200 p-6 bg-white border border-stone-200 shadow-sm rounded-lg hover:shadow-md transition-shadow">
-        <div class="font-display text-4xl text-slate-900 mb-2">A+</div>
-        <div class="text-xs uppercase tracking-widest text-slate-400">Insurer Rating</div>
+        <div class="font-display text-3xl md:text-4xl text-slate-900 mb-2">A+</div>
+        <div class="text-[10px] md:text-xs uppercase tracking-widest text-slate-400">Insurer Rating</div>
       </div>
       <div class="text-center reveal delay-300 p-6 bg-white border border-stone-200 shadow-sm rounded-lg hover:shadow-md transition-shadow">
-        <div class="font-display text-4xl text-gold-500 italic mb-2">$0</div>
-        <div class="text-xs uppercase tracking-widest text-slate-400">Cash Upfront</div>
+        <div class="font-display text-3xl md:text-4xl text-gold-500 italic mb-2">$0</div>
+        <div class="text-[10px] md:text-xs uppercase tracking-widest text-slate-400">Cash Upfront</div>
       </div>
     </div>
   </div>
 
-  <section id="audience" class="h-screen w-full flex flex-col md:flex-row split-container bg-slate-900 relative">
+  <section id="audience" class="h-auto md:h-screen w-full flex flex-col md:flex-row split-container bg-slate-900 relative">
 
-    <div class="split-pane flex-1 bg-cover bg-center relative group border-r border-white/10"
+    <div class="split-pane flex-1 min-h-[50vh] bg-cover bg-center relative group border-r border-white/10"
          style="background-image:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop');">
       <div class="absolute inset-0 bg-slate-900/80 group-hover:bg-slate-900/60 transition-colors duration-700"></div>
       
@@ -212,7 +247,7 @@
           <h2 class="font-display text-4xl md:text-6xl text-white mb-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-700 text-shadow-sm">
             For<br><span class="italic text-gold-400">Purchasers</span>
           </h2>
-          <div class="opacity-0 group-hover:opacity-100 translate-y-8 group-hover:translate-y-0 transition-all duration-700 delay-100 max-w-md">
+          <div class="md:opacity-0 group-hover:opacity-100 translate-y-0 md:translate-y-8 group-hover:translate-y-0 transition-all duration-700 delay-100 max-w-md">
             <p class="text-white text-lg font-light mb-8 leading-relaxed text-shadow-sm">Maximize liquidity. Keep your funds working in your offset account until settlement.</p>
             <button class="bg-white text-slate-900 px-8 py-3 rounded-full text-xs font-bold uppercase tracking-[0.2em] hover:bg-gold-400 hover:text-white transition-colors">
               Check Eligibility
@@ -222,7 +257,7 @@
       </div>
     </div>
 
-    <div class="split-pane flex-1 bg-cover bg-center relative group"
+    <div class="split-pane flex-1 min-h-[50vh] bg-cover bg-center relative group"
          style="background-image:url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop');">
       <div class="absolute inset-0 bg-slate-900/80 group-hover:bg-slate-900/60 transition-colors duration-700"></div>
 
@@ -232,7 +267,7 @@
           <h2 class="font-display text-4xl md:text-6xl text-white mb-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-700 text-shadow-sm">
             For<br><span class="italic text-gold-400">Developers</span>
           </h2>
-          <div class="opacity-0 group-hover:opacity-100 translate-y-8 group-hover:translate-y-0 transition-all duration-700 delay-100 max-w-md text-right">
+          <div class="md:opacity-0 group-hover:opacity-100 translate-y-0 md:translate-y-8 group-hover:translate-y-0 transition-all duration-700 delay-100 max-w-md text-right">
             <p class="text-white text-lg font-light mb-8 leading-relaxed text-shadow-sm">Accelerate pre-sales and remove cash barriers for your buyers at exchange.</p>
             <button class="bg-transparent border border-white text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-slate-900 transition-colors">
               Partner With Us
@@ -316,8 +351,56 @@
           <svg viewBox="0 0 674.71 628.37" class="w-full h-auto relative z-10">
             <g transform="translate(-36.443 -169.91)">
               <path class="map-stroke" d="m708.4 502.01c0 37.16-11.92 65.02-27.17 90.8-3.57 6.03-8.05 7.41-12.34 12.89-9.93 12.7-5.87 26.34-19.51 36.53-11.91 8.9-14.48 24.4-14.96 40.51-0.23 7.49-16.51-1.37-21.05 3.27-2.6 2.65-11.77-1.05-15.39 0.98-7.92 4.44-14.63 14.82-23.89 19.37-7.4 3.64-12.6-16.52-21.87-15.24-15.76 2.18-33.59-4.74-52.76-3.26-8.96 0.69-12.09-18.46-21.25-17.17-12.83 1.81 0.4-46.57-11.35-37.37-12.99 10.17-7.22-22.08-19.92-22.08-5.47 0 7.66-30.14 2.17-30.19-2.36-0.02-32.59 33.65-33.93 31.7-4.21-6.11-7.87-20.52-15.34-26.81-5.25-4.43-7.9-11.28-13.4-15.09-8.99-6.23-16.11-2.36-25.66-7.12-5.77-2.87-11.54-7.1-17.37-6.82-8.84 0.42-14.53 2.38-27.09 3.39-20.5 1.66-34.66 14.44-55.05 14.11-17.02-0.28-31.21 35.1-47.69 32.77-18.03-2.55-32.34 4.29-45.13 4.12-11.01-0.14-20.45 29.56-30.42 25.02-14.24-6.49-36.13 2.41-47.822-13.43-5.486-7.44 12.562-6.29 8.105-15.84-2.685-5.75 0.519-12.17 0.268-19.57-0.192-5.68-3.656-12.27-5.863-17.55-2.267-5.42-7.544-9.92-10.006-16.38-1.976-5.18-0.969-12.2-3.938-17.57-4.309-7.8-11.825-15.42-16.082-22.92-2.189-3.86-1.425-8.14-3.718-11.67-6.669-10.26-17.693-14.85-21.19-23.52-2.934-7.27 20.25 5.54 21.256 0.17 0.721-3.84-6.174-8.59-10.094-16.02-4.882-9.25-7.114-21.28-7.114-25.05 0-9.54-2.331-27.06 0.883-34.25 3.198-7.15 8.255-2.79 14.227-7.64 9.028-7.33 17.724-16.67 30.774-23.07 4.513-2.21 11.229-1.81 16.214-3.81 19.33-7.77 39.47-16.91 57.97-26.47 8.73-4.52 11.2-20.1 19.53-25.23 3.65-2.25-6.66-13.07-3.05-15.43 5.29-3.45 1.29-10.87 6.56-14.56 4.16-2.91 15.25 14.97 19.34 11.85 2.64-2.02-4.04-19.61-1.45-21.77 3.35-2.8 15.21 7.51 18.56 4.62 2.61-2.26-7.96-18.51-5.38-20.86 13.61-12.45 31.83-22.7 47.09-34.28 4.46-3.39 19.79 21.93 24.32 18.69 7.28-5.22 18.8 10.12 25.57 3.38 5.6-5.58-11.58-7.92-6.34-15.39 6.96-9.89 12.74-23.67 24.48-33.89 7.92-6.9 20.45 1.94 29.93-2.47 3.02-1.4 4.15-6.15-0.11-9.64-4.05-3.31-13.5-5.34-11.15-7.84 3.29-3.51 22.32 6.61 33.45 6 5.58-0.31 11.7 4.26 13.25 4.26 5.2 0 11.92 5.49 17.06 5.64 3.63 0.1 5.11-5.18 8.7-5.01 7.95 0.38 11.26 2.97 19.04 3.71 7.4 0.69 4.02 10.28-0.88 15.7-2.52 2.79-16.91 7.68-12.68 13.14 4.31 5.55-14.81 19.29-8.17 23.4 25.99 16.08 49.08 45.95 79.91 53.95 24.99 6.49 26.96-48.57 29.67-73.46 1.71-15.72 17.78-64.12 21.46-53.82 3.84 10.76 7.9 26.5 17.87 47.51 1.72 3.63-0.1 16.99 2.24 20.9 2.39 4 7.19 0.39 11.75 2.08 4.26 1.59 8.24 8.45 11.51 12.52 5.2 6.46-1.54 28.67 4.42 35.58 8.16 9.47 4.05 39.01 13.49 48.28 3.76 3.69 8.43-2.83 12.43 0.6 5.72 4.9 17.56 12.78 21.35 19.42 2.76 4.85-2.74 8.67 1.64 11.97 7.32 5.5 9.42 27.64 16.84 32.44 3.04 1.96 0.69-6.33 8.41-0.84 5.68 4.04 3.43 15.89 7.3 21.06 5.85 7.8 19.16 23.36 23.89 30.4 10.61 15.8 4.65 39.4 4.65 47.67z" />
+              <path class="map-stroke" d="m597.5 759.96c0 10.34-6.37 16.98-11.64 23.98-4.59 6.1-7.42 13.26-16.28 13.26-6.47 0-6.18-5.39-8.77-8.21-5.04-5.47-8.75-11.87-8.75-24.65 0-11.93-15.51-28.87-4.46-29.61 6.86-0.47 21.8 11.54 29.1 11.54 7.43 0 15.52-5.24 18.61-5.14 4.82 0.16 2.19 7.04 2.19 18.83z" />
             </g>
           </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="py-24 bg-stone-50">
+    <div class="container mx-auto px-6 max-w-3xl">
+      <div class="text-center mb-16 reveal">
+        <span class="text-gold-600 text-xs font-bold tracking-[0.2em] uppercase">Common Questions</span>
+        <h2 class="font-display text-4xl text-slate-900 mt-3">FAQ</h2>
+      </div>
+
+      <div class="space-y-4">
+        <div class="bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden reveal">
+          <button class="w-full flex justify-between items-center p-6 text-left focus:outline-none" onclick="toggleFaq(this)">
+            <span class="font-display font-bold text-lg text-slate-800">What exactly is a deposit bond?</span>
+            <i class="fa-solid fa-chevron-down faq-icon text-gold-500 text-sm"></i>
+          </button>
+          <div class="faq-content bg-stone-50">
+            <div class="p-6 pt-0 text-slate-600 font-light leading-relaxed border-t border-stone-200 pt-4">
+              A deposit bond is a substitute for a cash deposit. It guarantees the vendor that the 10% deposit will be paid at settlement. You pay a small fee (the premium) to use the bond, keeping your cash in your bank account until settlement day.
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden reveal delay-100">
+          <button class="w-full flex justify-between items-center p-6 text-left focus:outline-none" onclick="toggleFaq(this)">
+            <span class="font-display font-bold text-lg text-slate-800">Does it cost me interest?</span>
+            <i class="fa-solid fa-chevron-down faq-icon text-gold-500 text-sm"></i>
+          </button>
+          <div class="faq-content bg-stone-50">
+            <div class="p-6 pt-0 text-slate-600 font-light leading-relaxed border-t border-stone-200 pt-4">
+              No. Unlike a bank guarantee or a loan, there is no interest rate. You simply pay a one-off premium fee based on the deposit amount and the term length (time until settlement).
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden reveal delay-200">
+          <button class="w-full flex justify-between items-center p-6 text-left focus:outline-none" onclick="toggleFaq(this)">
+            <span class="font-display font-bold text-lg text-slate-800">Can I use it for auctions?</span>
+            <i class="fa-solid fa-chevron-down faq-icon text-gold-500 text-sm"></i>
+          </button>
+          <div class="faq-content bg-stone-50">
+            <div class="p-6 pt-0 text-slate-600 font-light leading-relaxed border-t border-stone-200 pt-4">
+              Yes. We can issue an "Auction Bond" with a pre-approved limit. You can bid up to that limit at any auction. If you are successful, the bond details are filled in on the spot.
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -438,13 +521,30 @@
   </footer>
 
   <script>
-    // 1) Scroll Reveal Animation
+    // 1) Mobile Menu Toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    let isMenuOpen = false;
+
+    function toggleMenu() {
+      isMenuOpen = !isMenuOpen;
+      if (isMenuOpen) {
+        mobileMenu.classList.add('open');
+        menuBtn.innerHTML = '<i class="fa-solid fa-xmark text-2xl"></i>';
+      } else {
+        mobileMenu.classList.remove('open');
+        menuBtn.innerHTML = '<i class="fa-solid fa-bars text-2xl"></i>';
+      }
+    }
+    menuBtn.addEventListener('click', toggleMenu);
+
+    // 2) Scroll Reveal Animation
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-    }, { threshold: 0.12 });
+    }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-    // 2) Nav Polish on Scroll
+    // 3) Nav Polish on Scroll
     const nav = document.getElementById('topNav');
     function handleNav() {
       if (window.scrollY > 40) nav.classList.add('nav-glass');
@@ -453,7 +553,7 @@
     window.addEventListener('scroll', handleNav);
     handleNav();
 
-    // 3) Map Animation (Restored)
+    // 4) Map Animation
     document.addEventListener('DOMContentLoaded', () => {
       const mapSection = document.getElementById('map');
       const mapWrap = mapSection?.querySelector('.map-wrap');
@@ -487,7 +587,20 @@
       io.observe(mapSection);
     });
 
-    // 4) Scroll-synced Background (Subtle)
+    // 5) FAQ Toggle
+    function toggleFaq(button) {
+      const content = button.nextElementSibling;
+      const icon = button.querySelector('.faq-icon');
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+        icon.classList.remove('rotate-180');
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+        icon.classList.add('rotate-180');
+      }
+    }
+
+    // 6) Scroll-synced Background
     const process = document.getElementById('process');
     function syncProcessBG() {
       if (!process) return;
